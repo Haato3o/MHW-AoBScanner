@@ -9,7 +9,7 @@ namespace MHW_AoBScanner
     class Program
     {
         static readonly long start = 0x143000000;
-        static readonly long end = 0x163B15000;
+        static readonly long end = 0x163ED2000;
 
         static Dictionary<byte, List<Signature>> signatures = new Dictionary<byte, List<Signature>>();
         static int signaturesCount = 0;
@@ -30,7 +30,7 @@ namespace MHW_AoBScanner
                 new Signature()
                 {
                     Name = "CANTEEN_OFFSET",
-                    Pattern = new Pattern("20 F2 ?? ?? 00 00 00 00 B8 48 19 43 01"),
+                    Pattern = new Pattern("20 F2 ?? ?? 00 00 00 00 ?? ?? ?? 43 01"),
                     Offset = 0
                 },
                 new Signature()
@@ -42,8 +42,8 @@ namespace MHW_AoBScanner
                 new Signature()
                 {
                     Name = "MONSTER_TARGETED_OFFSET",
-                    Pattern = new Pattern("44 01 00 00 00 1C 00 00 06 83 DB AF 62 2F"),
-                    Offset = -0x33
+                    Pattern = new Pattern("01 00 00 00 1C 00 00 06 83 DB AF 62 2F"),
+                    Offset = -0x34
                 },
                 new Signature()
                 {
@@ -54,26 +54,26 @@ namespace MHW_AoBScanner
                 new Signature()
                 {
                     Name = "WEAPON_OFFSET",
-                    Pattern = new Pattern("44 01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
-                    Offset = -0x33
+                    Pattern = new Pattern("01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
+                    Offset = -0x34
                 },
                 new Signature()
                 {
                     Name = "WEAPON_MECHANICS_OFFSET",
-                    Pattern = new Pattern("44 01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
-                    Offset = -0x33
+                    Pattern = new Pattern("01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
+                    Offset = -0x34
                 },
                 new Signature()
                 {
                     Name = "EQUIPMENT_OFFSET",
-                    Pattern = new Pattern("44 01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
-                    Offset = -0x33
+                    Pattern = new Pattern("01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
+                    Offset = -0x34
                 },
                 new Signature()
                 {
                     Name = "ABNORMALITY_OFFSET",
-                    Pattern = new Pattern("44 01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
-                    Offset = -0x33
+                    Pattern = new Pattern("01 00 00 00 10 01 80 05 7D 68 64 22 ?? ?? ?? 43 01"),
+                    Offset = -0x34
                 },
                 new Signature()
                 {
@@ -102,8 +102,8 @@ namespace MHW_AoBScanner
                 new Signature()
                 {
                     Name = "MONSTER_SELECTED_OFFSET",
-                    Pattern = new Pattern("80 4D ?? ?? 00 00 00 00 50 3C ?? ?? 00 00 00 00 C0 80"),
-                    Offset = -0x20
+                    Pattern = new Pattern("0E 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 F0 E0 ?? ?? 00 00 00"),
+                    Offset = -0x2B
                 }
             };
             signaturesCount = sigs.Count;
