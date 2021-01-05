@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using MHW_AoBScanner.Core;
 using MHW_AoBScanner.WinApi;
 
@@ -8,7 +9,7 @@ namespace MHW_AoBScanner
 {
     class Program
     {
-        static readonly long start = 0x143000000;
+        static readonly long start = 0x140000000;
         static readonly long end = 0x163ED2000;
 
         static Dictionary<byte, List<Signature>> signatures = new Dictionary<byte, List<Signature>>();
@@ -104,7 +105,70 @@ namespace MHW_AoBScanner
                     Name = "MONSTER_SELECTED_OFFSET",
                     Pattern = new Pattern("0E 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 F0 E0 ?? ?? 00 00 00"),
                     Offset = -0x2B
-                }
+                },
+                new Signature()
+                {
+                    Name = "PLAYER_DATA_OFFSET",
+                    Pattern = new Pattern("0E 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 ?? ?? ?? ?? 00 00 00 00 F0 E0 ?? ?? 00 00 00"),
+                    Offset = -0x2B
+                },
+                new Signature()
+                {
+                    Name = "FUN_GAME_INPUT",
+                    Pattern = new Pattern("48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 48 89 7c 24 20 41 56 48 83 ec 20 33 ff 48 8d b1 38 01 00 00"),
+                    Offset = 0
+                },
+                new Signature()
+                {
+                    Name = "PLAYER_DATA_OFFSET",
+                    Pattern = new Pattern("48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 8B F8 F8 0A 00 E8 ?? ?? ?? ?? 0F 1F 40 00"),
+                    Offset = 3,
+                    FindInFunction = true,
+                    AddressOffset = -8
+                },
+                new Signature()
+                {
+                    Name = "ITEM_DATA_OFFSET",
+                    Pattern = new Pattern("48 8B 0D ?? ?? ?? ?? 40 38 B9 92 47 01 00"),
+                    Offset = 3,
+                    FindInFunction = true
+                },
+                new Signature()
+                {
+                    Name = "WORLD_DATA_OFFSET",
+                    Pattern = new Pattern("48 8B DA E8 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48"),
+                    Offset = 11,
+                    FindInFunction = true
+                },
+                new Signature()
+                {
+                    Name = "WEAPON_DATA_OFFSET",
+                    Pattern = new Pattern("48 8B F9 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ??"),
+                    Offset = 6,
+                    FindInFunction = true
+                },
+                new Signature()
+                {
+                    Name = "HUD_DATA_OFFSET",
+                    Pattern = new Pattern("39 50 34 75 0E 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? EB 20"),
+                    Offset = 8,
+                    FindInFunction = true
+                },
+                new Signature()
+                {
+                    Name = "GAME_INPUT_OFFSET",
+                    Pattern = new Pattern("48 8B F9 48 8B 0D ?? ?? ?? ?? 33 D2 E8 ?? ?? ?? ?? 84 C0 74 16"),
+                    Offset = 6,
+                    FindInFunction = true
+                },
+                new Signature()
+                {
+                    Name = "MUSIC_SKILL_EFC_DATA_OFFSET",
+                    Pattern = new Pattern("48 8B F9 48 8B 1D ?? ?? ?? ?? E8 ?? ?? ?? ??"),
+                    Offset = 6,
+                    FindInFunction = true,
+                    AddressOffset = -0x10
+                },
             };
             signaturesCount = sigs.Count;
             foreach (Signature sig in sigs)
@@ -147,7 +211,16 @@ namespace MHW_AoBScanner
                     {
                         signature.Found = true;
                         signaturesCount--;
-                        Console.WriteLine($"Address {signature.Name} 0x{(start - (long)Memory.BaseAddress) + i + signature.Offset:X8}");
+                        if (signature.FindInFunction)
+                        {
+                            int offset = BitConverter.ToInt32(buffer, i + signature.Offset);
+                            offset += signature.AddressOffset + 4;
+                            Console.WriteLine($"Address {signature.Name} 0x{(start - (long)Memory.BaseAddress) + (i + signature.Offset) + offset:X8}");
+                        } else
+                        {
+                            Console.WriteLine($"Address {signature.Name} 0x{(start - (long)Memory.BaseAddress) + i + signature.Offset:X8}");
+
+                        }
                     }
                 }
 

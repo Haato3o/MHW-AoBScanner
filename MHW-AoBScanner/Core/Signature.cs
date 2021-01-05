@@ -11,5 +11,7 @@ namespace MHW_AoBScanner.Core
         public int Offset { get; set; }
         public bool Found { get; set; }
         public int Length => Pattern.Length;
+        public bool FindInFunction { get; set; }
+        public int AddressOffset { get; set; } = 0;
     }
 }
